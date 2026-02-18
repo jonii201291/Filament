@@ -49,9 +49,9 @@ Instalación
    <img width="991" height="555" alt="image" src="https://github.com/user-attachments/assets/dde7e867-100c-4c9e-9c1b-b2748e133435" />
 
 11. Crear los recursos en Filament
-  En la consola
-  php artisan make:model Category -m
-  php artisan make:model Post -m
+  * En la consola
+    php artisan make:model Category -m
+    php artisan make:model Post -m
 
 13. En database/migrations/tablaCategories se añade al método up()
     public function up(): void
@@ -81,7 +81,7 @@ Instalación
         });
     }
 
-      - php artisan migrate
+    * php artisan migrate
 
 15.  Establecer relaciones
     * composer require laravel/sanctum
@@ -200,7 +200,8 @@ class User extends Authenticatable
 17. Crear CRUD
     php artisan make:filament-resource Category --generate
 
-    <img width="712" height="400" alt="image" src="https://github.com/user-attachments/assets/974ce361-288e-4fc3-a0d6-6df080648f33" />
+     <img width="715" height="351" alt="image" src="https://github.com/user-attachments/assets/833578f0-c40b-4d0d-be03-38855698abde" />
+
 
       php artisan make:filament-resource Post --generate
 19. 
