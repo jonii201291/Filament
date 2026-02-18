@@ -84,3 +84,123 @@ Instalación
       - php artisan migrate
 
 15.  Establecer relaciones
+    * composer require laravel/sanctum
+    * php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+    * php artisan migrate
+    * En app/Models/Category.php
+    <?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;  // añadimos esto
+use Illuminate\Database\Eloquent\Relations\HasMany;     // añadimos esto
+
+class Category extends Model
+{
+    use HasFactory;
+    protected $guarded = [];
+    /**
+     *  Get all of the posts for the Category
+     *
+     *  @return BelongsTo<int, Post>
+     */
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class);             // una categoría contendrá varios posts (relación 1:n, lado 1) 
+    }                                                   
+}
+    * En app/Models/Post.php
+      <?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;        // añadimos esto
+use Illuminate\Database\Eloquent\Relations\BelongsTo;         // añadimos esto
+
+class Post extends Model
+{
+    use HasFactory;
+    protected $guarded = [];
+    /**
+     * Get the category that owns the Post
+     *
+     * @return BelongsTo<int, Category>
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);   // cada post pertenece a una categoría (lado n relación 1:n)
+    }
+    /**
+     * Get the user that owns the Post
+     *
+     * @return BelongsTo<int, User>
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);       // cada post pertenece a un usuario (lado n relación 1:n)
+    }
+}
+    * En app/Modls/User.php
+        <?php
+
+namespace App\Models;
+
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Laravel\Sanctum\HasApiTokens;                           // añadimos esto
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;         // añadimos esto
+use Illuminate\Database\Eloquent\Factories\HasFactory;      // añadimos esto
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable
+{
+    use HasApiTokens, HasFactory, Notifiable;
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+    /////////////////////// añadimos esta parte
+    /**
+     * Get all of the posts for the User
+     *
+     * @return HasMany<int, Post>
+     */
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class);    // un usuario tiene muchos posts (relación 1:n, lado 1)
+    }
+}
+
+17. Crear CRUD
+    php artisan make:filament-resource Category --generate
+
+    <img width="712" height="400" alt="image" src="https://github.com/user-attachments/assets/974ce361-288e-4fc3-a0d6-6df080648f33" />
+
+      php artisan make:filament-resource Post --generate
+19. 
